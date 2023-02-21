@@ -38,13 +38,13 @@ SKI was implemented on a fork of QEMU 1.0.1 and has the same building dependenci
 (see `vmm/README` for QEMU's original dependencies). However, SKI requires the following 
 configured options passed to `./configure`: 
 ```bash
---disable-strip --target-list="i386-softmmu" --disable-pie --disable-smartcard
+--disable-strip --target-list="i386-softmmu" --disable-pie --disable-smartcard --disable-xen
 ```
 
 Assuming the dependencies are satisfied, the following commands should be sufficient to build SKI: 
 ```bash
   $ cd /home/ski-user/ski/vmm
-  $ ./configure --prefix=/home/ski-user/ski/vmm-install --disable-strip --target-list="i386-softmmu" --disable-pie --disable-smartcard
+  $ ./configure --disable-strip --target-list="i386-softmmu" --disable-pie --disable-smartcard --enable-kvm --disable-xen
   $ make V=1 or make -j 4
   $ make install
 ```

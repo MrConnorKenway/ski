@@ -310,19 +310,19 @@ void* ski_forkall_thread_restore(void *param){
 
 	    "push %1;"        /* Push the parameter that is going to be used because of the env on to the temporary stack */
 
-		"mov    %2,%%rdi;"
-		"mov    %3,%%rsi;"
+	    "mov    %2,%%rdi;"
+	    "mov    %3,%%rsi;"
 	    "mov    %4,%%rdx;"
-		"callq  %P5;"     /* Call memcpy to restore the original stack (from the backup up stack containing the TLS)*/
-		/* memcpy(stack_min, stack, FORKALL_THREAD_STACK_SIZE); */
+	    "callq  memcpy;"     /* Call memcpy to restore the original stack (from the backup up stack containing the TLS)*/
+	    /* memcpy(stack_min, stack, FORKALL_THREAD_STACK_SIZE); */
 
 
-		"pop %%rdi;"
-		"callq  %P6;"     /* Call forkall_thread_restore2() which does the actual restore of the registers (including stack pointer) */
-		/* forkall_thread_restore2((forkall_thread*) param); */
-			: 
-			: "m" (tmp_stack_addr), "m" (param), "m" (stack_min), "m" (stack), "i" (FORKALL_THREAD_STACK_SIZE), "i" (memcpy), "i" (ski_forkall_thread_restore_registers)
-			: "%esp");	  /* No need to clobber becasuse we don't return */
+	    "pop %%rdi;"
+	    "callq  ski_forkall_thread_restore_registers;"     /* Call forkall_thread_restore2() which does the actual restore of the registers (including stack pointer) */
+	    /* forkall_thread_restore2((forkall_thread*) param); */
+	    : 
+	    : "m" (tmp_stack_addr), "m" (param), "m" (stack_min), "m" (stack), "i" (FORKALL_THREAD_STACK_SIZE)
+	    : "%esp");	  /* No need to clobber becasuse we don't return */
 
 
 	// DOES NOT RETURN
